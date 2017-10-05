@@ -2,6 +2,8 @@ package top.huliweiba.coolweather.util;
 
 import android.text.TextUtils;
 
+import com.google.gson.Gson;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -9,6 +11,7 @@ import org.json.JSONObject;
 import top.huliweiba.coolweather.db.City;
 import top.huliweiba.coolweather.db.County;
 import top.huliweiba.coolweather.db.Province;
+import top.huliweiba.coolweather.gson.Weather;
 
 /**
  * Created by Acer on 2017/10/5.
@@ -73,6 +76,18 @@ public class Utility {
         }
         return false;
     }
+
+    public static Weather handleWeatherResponse(String response){
+        try {
+            JSONObject jsonObject = new JSONObject(response);
+            JSONArray jsonArray = jsonObject.getJSONArray("HeWeather5");
+            String weatherContent = jsonArray.getJSONObject(0).toString();
+            return new Gson().fromJson(weatherContent,Weather.class);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    };
 
 
 }

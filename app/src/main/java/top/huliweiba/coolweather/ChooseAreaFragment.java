@@ -1,6 +1,7 @@
 package top.huliweiba.coolweather;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -77,6 +78,21 @@ public class ChooseAreaFragment extends Fragment {
                 } else if (currrentLevel == LEVEL_CITY) {
                     selectedCity = cityList.get(i);
                     queryCounties();
+                }else if(currrentLevel ==LEVEL_COUNTY){
+                    String weatherId = countyList.get(i).getWeatherId();
+                    if(getActivity() instanceof MainActivity){
+                        Intent intent = new Intent(getActivity(),WeatherActivity.class);
+                        intent.putExtra("weather_id",weatherId);
+                        startActivity(intent);
+                        getActivity().finish();
+                    }else if(getActivity() instanceof WeatherActivity){
+                        WeatherActivity activity = (WeatherActivity)getActivity();
+                        activity.drawerLayout.closeDrawers();
+                        activity.refreshLayout.setRefreshing(true);
+                        activity.setWeatherId(weatherId);
+                        activity.requestWeather(weatherId);
+                    }
+
                 }
             }
         });
